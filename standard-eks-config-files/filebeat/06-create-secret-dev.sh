@@ -1,0 +1,1 @@
+kubectl create -n filebeat secret generic filebeat-es-creds --from-literal=username='filebeat-eks-dev-logger' --from-literal=password='S1_iPRgAiwl8-b1Yhvuy' --from-literal=elasticsearch-host='logview-dev.tfs.toyota.com' --from-literal=elasticsearch-port='443' --from-literal=elasticsearch-protocol='https'

@@ -1,0 +1,17 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: servicenow-read-only-clusterrole
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  - pods
+  - services
+  - nodes
+  - namespaces/kube-system/endpoints/kube-controller-manager
+  verbs:
+  - get
+  - list
+  - watch

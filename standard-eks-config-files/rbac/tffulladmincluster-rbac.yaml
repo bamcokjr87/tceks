@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    kubernetes.io/description: 'TFS EKS ClusterRoleBinding for Terraform Full Administrator.'
+  labels:
+    kubernetes.io/cluster-service: "true"
+  name: tffulladmincluster-rolebind
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tfsekstffulladmincluster-role
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: {{accountalias}}-tf-full-admin

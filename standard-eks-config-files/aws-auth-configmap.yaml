@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-auth
+  namespace: kube-system
+data:
+  mapRoles: |
+    - rolearn: <ARN of instance role (not instance profile)>
+      username: system:node:{{EC2PrivateDNSName}}
+      groups:
+        - system:bootstrappers
+        - system:nodes
+  mapUsers: |
+    - userarn: arn:aws:iam::{{accountid}}:role/{{accountalias}}-full-admin
+      username: {{accountalias}}-full-admin
+      groups:
+        - system:masters
+    - userarn: arn:aws:iam::{{accountid}}:role/{{accountalias}}-cloud-admin
+      username: {{accountalias}}-cloud-admin
+      groups:
+        - system:masters
+    - userarn: arn:aws:iam::{{accountid}}:role/{{accountalias}}-network-admin
+      username: {{accountalias}}-network-admin
+      groups:
+        - system:authenticated
+    - userarn: arn:aws:iam::{{accountid}}:role/{{accountalias}}-monitoring-admin
+      username: {{accountalias}}-monitoring-admin
+      groups:
+        - system:authenticated
+    - userarn: arn:aws:iam::{{accountid}}:role/{{accountalias}}-tf-full-admin
+      username: {{accountalias}}-tf-full-admin
+      groups:
+        - system:authenticated
+    - userarn: arn:aws:iam::{{accountid}}:role/{{accountalias}}-service-servicenow-role
+      username: servicenow-read-only-user
+      groups:
+        - system:authenticated

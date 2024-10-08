@@ -1,0 +1,14 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+   name: standard
+provisioner: kubernetes.io/aws-ebs
+parameters:
+   type: gp2
+   iopsPerGB: "10"
+   fsType: ext4
+   encrypted: "true"
+   kmsKeyId: arn:aws:kms:us-east-1:992376627226:key/5074d788-3305-4cea-827c-0518b616a2b7
+mountOptions:
+- debug
+allowVolumeExpansion: true

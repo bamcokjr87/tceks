@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: k8s-dev-jees91-b8b4
+  labels:
+    name: k8s-dev-jees91-b8b4
+    appname: Jenkins_ES_DEV
+    appsupport: DevOpsEngineering_internal.toyota.com
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: k8s-dev-sonaxy-rx8n
+  labels:
+    name: k8s-dev-sonaxy-rx8n
+    appname: SonarQube_DEV
+    appsupport: DevOpsEngineering_internal.toyota.com
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: k8s-tst-jeet3o-8fd9
+  labels:
+    name: k8s-tst-jeet3o-8fd9
+    appname: Jenkins_ES_TEST
+    appsupport: DevOpsEngineering_internal.toyota.com
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: k8s-tst-soteik-25ht
+  labels:
+    name: k8s-tst-soteik-25ht
+    appname: SonarQube_TEST
+    appsupport: DevOpsEngineering_internal.toyota.com
+

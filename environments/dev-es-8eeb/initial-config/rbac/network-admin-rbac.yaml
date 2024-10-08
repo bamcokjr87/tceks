@@ -1,0 +1,29 @@
+## Make sure to replace the account aliase with the actual account alias
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: tfsessubprod-network-admin-rolebind
+  namespace: twistlock
+subjects:
+- kind: User
+  name: tfsessubprod-network-admin
+  namespace: twistlock
+roleRef:
+  kind: ClusterRole
+  name: tfsekstoolscluster-role
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: tfsessubprod-network-admin-rolebind
+  namespace: network-tools
+subjects:
+- kind: User
+  name: tfsessubprod-network-admin
+  namespace: network-tools
+roleRef:
+  kind: ClusterRole
+  name: tfsekstoolscluster-role
+  apiGroup: rbac.authorization.k8s.io

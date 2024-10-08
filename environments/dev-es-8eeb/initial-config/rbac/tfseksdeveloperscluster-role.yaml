@@ -1,0 +1,61 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: tfseksdeveloperscluster-role
+rules:
+- apiGroups: ["events.k8s.io", ""]
+  resources: ["events"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get","list", "create", "patch", "delete", "update"]
+- apiGroups: [""]
+  resources:
+  - configmaps
+  - endpoints
+  - limitranges
+  - persistentvolumeclaims
+  - pods
+  - pods/log
+  - pods/exec
+  - pods/portforward
+  - pods/attach
+  - pods/proxy
+  - pods/eviction
+  - pods/status
+  - podtemplates
+  - replicationcontrollers
+  - replicationcontrollers/scale
+  - serviceaccounts
+  - services
+  - services/proxy
+  - services/status
+  verbs: ["*"]
+- apiGroups: [""]
+  resources:
+  - namespaces
+  verbs: ["list", "get", "watch"]
+- apiGroups: ["batch", "autoscaling", "coordination.k8s.io", "policy", "rbac.authorization.k8s.io"]
+  resources:
+  - cronjobs
+  - jobs
+  - horizontalpodautoscalers
+  - leases
+  - poddisruptionbudgets
+  - rolebindings
+  - roles
+  verbs: ["*"]
+- apiGroups: ["apps"]
+  resources:
+  - deployments
+  - replicasets
+  - statefulsets
+  - statefulsets/scale
+  verbs: ["*"]
+- apiGroups: ["extensions"]
+  resources:
+  - deployments
+  - deployments/scale
+  - ingresses
+  - replicasets
+  verbs: ["*"]

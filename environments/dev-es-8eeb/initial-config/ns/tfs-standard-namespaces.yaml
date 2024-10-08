@@ -1,0 +1,23 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: twistlock
+  labels:
+    name: twistlock
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: network-tools
+  labels:
+    name: network-tools
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring-tools
+  labels:
+    name: monitoring-tools
+
+

@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-auth
+  namespace: kube-system
+data:
+  mapRoles: |
+    - rolearn: arn:aws:iam::992376627226:role/eks-dev-es-8eeb-worker-role
+      username: system:node:{{EC2PrivateDNSName}}
+      groups:
+        - system:bootstrappers
+        - system:nodes
+  mapUsers: |
+    - userarn: arn:aws:iam::992376627226:role/tfsessubprod-full-admin
+      username: tfsessubprod-full-admin
+      groups:
+        - system:masters
+    - userarn: arn:aws:iam::992376627226:role/tfsessubprod-cloud-admin
+      username: tfsessubprod-cloud-admin
+      groups:
+        - system:masters
+    - userarn: arn:aws:iam::992376627226:role/tfsessubprod-network-admin
+      username: tfsessubprod-network-admin
+      groups:
+        - system:authenticated
+    - userarn: arn:aws:iam::992376627226:role/tfsessubprod-monitoring-admin
+      username: tfsessubprod-monitoring-admin
+      groups:
+        - system:authenticated
+    - userarn: arn:aws:iam::992376627226:role/tfsessubprod-eks-k8s-dev-jees91-role
+      username: k8s-dev-jees91
+      groups:
+        - system:authenticated
+    - userarn: arn:aws:iam::992376627226:role/tfsessubprod-tf-full-admin
+      username: tfsessubprod-tf-full-admin
+      groups:
+        - system:authenticated
+    - userarn: arn:aws:iam::992376627226:role/tfsessubprod-service-servicenow-role
+      username: servicenow-read-only-user
+      groups:
+        - system:authenticated

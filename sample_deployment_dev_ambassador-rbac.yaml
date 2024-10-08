@@ -1,0 +1,106 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ambassador-agent
+  namespace: k8s-dev-eas2je-ijd7
+  labels:
+    product: aes
+---
+# Source: ambassador/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ambassador
+  namespace: k8s-dev-eas2je-ijd7
+  labels:
+    product: aes
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      service: ambassador
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        service: ambassador
+        app.kubernetes.io/managed-by: getambassador.io
+      annotations:
+        consul.hashicorp.com/connect-inject: 'false'
+        sidecar.istio.io/inject: 'false'
+    spec:
+      terminationGracePeriodSeconds: 0
+      securityContext:
+        runAsUser: 8888
+      restartPolicy: Always
+      serviceAccountName: ambassador-agent
+      volumes:
+      - name: ambassador-pod-info
+        downwardAPI:
+          items:
+          - fieldRef:
+              fieldPath: metadata.labels
+            path: labels
+      containers:
+      - name: ambassador
+        image: artifactory.tfs.toyota.com/dnecloud-docker-dev-local/ambassador:1.13.5
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: https
+          containerPort: 8443
+        - name: admin
+          containerPort: 8877
+        env:
+        - name: HOST_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: AMBASSADOR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: AMBASSADOR_SINGLE_NAMESPACE
+          value: "true"
+        securityContext:
+          allowPrivilegeEscalation: false
+        livenessProbe:
+          httpGet:
+            path: /ambassador/v0/check_alive
+            port: admin
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /ambassador/v0/check_ready
+            port: admin
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 3
+        volumeMounts:
+        - name: ambassador-pod-info
+          mountPath: /tmp/ambassador-pod-info
+          readOnly: true
+        resources:
+          limits:
+            cpu: 1
+            memory: 400Mi
+          requests:
+            cpu: 200m
+            memory: 100Mi
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  service: ambassador
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      imagePullSecrets: []
+      dnsPolicy: ClusterFirst
+      hostNetwork: false

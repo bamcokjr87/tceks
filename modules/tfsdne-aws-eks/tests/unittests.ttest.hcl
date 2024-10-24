@@ -22,7 +22,7 @@ variables {
     MPE = "test"
     map-migrated = "test"
     this-account-id = "123456789012"
-    node_instance_type = "r4.large"
+    node_instance_type = "r5.4xlarge"
     maxpods = 3
     auto_scaling_min_size = "1"
     auto_scaling_max_size = "3"
@@ -31,7 +31,7 @@ variables {
     additional_eks_sgs = ["sg-012d96c37308b3762"]
     existing_node_sg = []
     key_pair = ""
-    cluster_version = 1.28
+    cluster_version = "1.28"
     activate-blue-asg = ""
 }
 
@@ -129,5 +129,48 @@ run "variables_validation" {
     assert {
         condition     = var.maxpods >= 1 && var.maxpods <= 110
         error_message = "maxpods must be a positive integer between 1 and 110."
+    }
+}
+
+run "aws_eks_cluster_test" {
+    command = plan
+
+    variables {
+        random_string = "${run.setup.environment_prefix.id}"
+    }
+
+    assert {
+        condition     = aws_eks_cluster.cluster.version == "${var.cluster_version}"
+        error_message = "Invalid eks cluster version"
+    }
+
+    assert {
+        condition = aws_eks_cluster.cluster.tags.SnowChargeCode == "${var.SnowChargeCode}"
+        error_message = "Invalid Snow Charge Code"
+    }
+
+    assert {
+        condition = aws_eks_cluster.cluster.tags.SnowEnvironment == "${var.SnowEnvironment}"
+        error_message = "Invalid Snow Environment"
+    }
+
+    assert {
+        condition = aws_eks_cluster.cluster.tags.SnowAppName == "${var.SnowAppName}"
+        error_message = "Invalid Snow App Name"
+    }
+
+    assert {
+        condition = aws_eks_cluster.cluster.tags.sourcerepo == "${var.this-git-repo}"
+        error_message = "Invalid Git Repo"
+    }
+
+    assert {
+        condition = aws_eks_cluster.cluster.tags.map-migrated == "${var.map-migrated}"
+        error_message = "Invalid Git Repo"
+    }
+
+     assert {
+        condition = aws_eks_cluster.cluster.tags.map-migrated == "${var.MPE}"
+        error_message = "Invalid MPE"
     }
 }
